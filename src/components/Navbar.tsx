@@ -36,8 +36,8 @@ const Navbar: React.FC = () => {
     <nav
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-sm'
-          : 'bg-white'
+          ? 'bg-black/60 backdrop-blur-md text-white shadow-sm'
+          : 'bg-transparent text-white'
       }`}
     >
       <div className="px-4 py-3 sm:px-6 sm:py-4">

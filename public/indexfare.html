@@ -111,7 +111,14 @@
     .hero-line:nth-child(3) { height: 180px; left: 45%; top: 60%; animation-delay: 3s; }
     @keyframes lineFade { 0%,100%{opacity:0.2} 50%{opacity:0.7} }
 
-    .hero-content { position: relative; z-index: 2; }
+    .hero-content { position: relative; z-index: 3; }
+    /* background image tiles behind hero for subtle flowing effect */
+    .hero-bg-images { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: visible; }
+    .hero-bg-images .bg-img { position: absolute; width: 38%; max-width: 680px; opacity: 0.12; filter: blur(2px); transform-origin: center; border-radius: 6px; }
+    .hero-bg-images .bg-img-1 { left: 6%; top: 14%; animation: floatSlow 20s ease-in-out infinite; }
+    .hero-bg-images .bg-img-2 { right: 6%; top: 26%; width: 34%; animation: floatSlow 24s ease-in-out infinite reverse; }
+    .hero-bg-images .bg-img-3 { left: 28%; top: 46%; width: 30%; opacity: 0.08; animation: floatSlow 28s ease-in-out infinite; }
+    @keyframes floatSlow { 0% { transform: translateY(0) rotate(0deg) } 50% { transform: translateY(-16px) rotate(0.3deg) } 100% { transform: translateY(0) rotate(0deg) } }
     .hero-eyebrow {
       font-family: var(--sans);
       font-size: .65rem;
@@ -629,6 +636,11 @@
 <section id="home">
   <div class="hero-bg"></div>
   <div class="hero-grain"></div>
+  <div class="hero-bg-images" aria-hidden="true">
+    <img src="https://picsum.photos/seed/bg1/1200/800" class="bg-img bg-img-1" />
+    <img src="https://picsum.photos/seed/bg2/1000/700" class="bg-img bg-img-2" />
+    <img src="https://picsum.photos/seed/bg3/1100/750" class="bg-img bg-img-3" />
+  </div>
   <div class="hero-line"></div>
   <div class="hero-line"></div>
   <div class="hero-line"></div>
@@ -792,38 +804,7 @@
   <audio id="audioPlayer" crossorigin="anonymous"></audio>
 </section>
 
-<!-- ════════════ UPLOAD ════════════ -->
-<section id="upload">
-  <div class="section-header reveal">
-    <p class="section-label">Add Your Memories</p>
-    <h2 class="section-title">Upload <em>Content</em></h2>
-  </div>
-  <div class="upload-grid">
-    <!-- Images -->
-    <div class="upload-card reveal" id="imgUploadCard">
-      <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-        <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-        <polyline points="21 15 16 10 5 21"/>
-      </svg>
-      <div class="upload-title">Photos</div>
-      <div class="upload-sub">JPG, PNG, WEBP · Up to 20 MB each</div>
-      <input type="file" id="imgInput" multiple accept="image/*" />
-      <button class="upload-btn" onclick="document.getElementById('imgInput').click()">Choose Files</button>
-      <div class="upload-file-list" id="imgFileList"></div>
-    </div>
-    <!-- Videos -->
-    <div class="upload-card reveal reveal-delay-1" id="vidUploadCard">
-      <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-        <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
-      </svg>
-      <div class="upload-title">Videos</div>
-      <div class="upload-sub">MP4, MOV, WEBM · Up to 500 MB each</div>
-      <input type="file" id="vidInput" multiple accept="video/*" />
-      <button class="upload-btn" onclick="document.getElementById('vidInput').click()">Choose Files</button>
-      <div class="upload-file-list" id="vidFileList"></div>
-    </div>
-  </div>
-</section>
+<!-- Upload section removed per request. Default gallery and videos are displayed above. -->
 
 <!-- ════════════ FOOTER ════════════ -->
 <footer>
