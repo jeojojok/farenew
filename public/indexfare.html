@@ -71,8 +71,8 @@
       transition: color .3s;
     }
     .nav-links a:hover { color: var(--gold); }
-    nav.scrolled {
-      background: rgba(10,10,11,0.95);
+    nav {
+      display: none;
     }
 
     .hero-bg {
@@ -99,7 +99,7 @@
     .hero-line:nth-child(3) { height: 180px; left: 45%; top: 60%; animation-delay: 3s; }
     @keyframes lineFade { 0%,100%{opacity:0.2} 50%{opacity:0.7} }
 
-    .hero-content { position: relative; z-index: 3; }
+    .hero-content { position: relative; z-index: 3; text-align: center; }
     /* background image tiles behind hero for subtle flowing effect */
     .hero-bg-images { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: visible; }
     .hero-bg-images .bg-img { position: absolute; width: 38%; max-width: 680px; opacity: 0.12; filter: blur(2px); transform-origin: center; border-radius: 6px; }
