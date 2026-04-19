@@ -33,31 +33,7 @@
       color: var(--text);
       font-family: var(--sans);
       overflow-x: hidden;
-      cursor: none;
     }
-
-    /* ── Custom Cursor ── */
-    #cursor {
-      position: fixed; top: 0; left: 0; z-index: 9999;
-      width: 10px; height: 10px;
-      background: var(--gold);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%,-50%);
-      transition: transform .1s, width .3s var(--transition), height .3s var(--transition), background .3s;
-      mix-blend-mode: difference;
-    }
-    #cursor-ring {
-      position: fixed; top: 0; left: 0; z-index: 9998;
-      width: 36px; height: 36px;
-      border: 1px solid var(--gold);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%,-50%);
-      transition: transform .12s ease, width .3s var(--transition), height .3s var(--transition), opacity .3s;
-      opacity: 0.5;
-    }
-    body:hover #cursor-ring { opacity: 1; }
 
     /* ── Nav ── */
     nav {
@@ -610,15 +586,18 @@
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
-      nav { padding: 0 24px; }
-      .nav-links { gap: 20px; }
-      .photo-grid { grid-template-columns: repeat(6,1fr); padding: 0 20px; }
+      nav { padding: 0 16px; height: 56px; }
+      .nav-links { gap: 12px; font-size: .65rem }
+      .nav-logo { display: none; }
+      .photo-grid { grid-template-columns: repeat(6,1fr); padding: 0 14px; }
       .photo-tile { grid-column: span 3 !important; grid-row: span 1 !important; }
-      .video-grid { grid-template-columns: 1fr; padding: 0 24px; }
-      .upload-grid { grid-template-columns: 1fr; padding: 0 24px; }
-      .music-inner { padding: 0 20px; }
-      .music-player { padding: 28px 24px; }
-      .player-controls { gap: 16px; }
+      .video-grid { grid-template-columns: 1fr; padding: 0 14px; }
+      .upload-grid { grid-template-columns: 1fr; padding: 0 14px; }
+      .music-inner { padding: 0 14px; }
+      .music-player { padding: 20px 16px; }
+      .player-controls { gap: 12px; }
+      .hero-title { font-size: clamp(2.2rem, 9vw, 3.6rem); }
+      section { padding: 72px 0; }
     }
 
     /* Gold shimmer animation for accents */
@@ -632,9 +611,7 @@
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+<!-- Custom cursor removed -->
 
 <!-- Navigation -->
 <nav id="mainNav">
@@ -871,22 +848,7 @@
 </div>
 
 <script>
-  /* ─── Cursor ─── */
-  const cur = document.getElementById('cursor');
-  const curR = document.getElementById('cursor-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  function animCursor() {
-    cur.style.left = mx + 'px'; cur.style.top = my + 'px';
-    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-    curR.style.left = rx + 'px'; curR.style.top = ry + 'px';
-    requestAnimationFrame(animCursor);
-  }
-  animCursor();
-  document.querySelectorAll('a, button, .photo-tile, .video-card, .upload-card').forEach(el => {
-    el.addEventListener('mouseenter', () => { curR.style.width = '56px'; curR.style.height = '56px'; curR.style.opacity = '.8'; });
-    el.addEventListener('mouseleave', () => { curR.style.width = '36px'; curR.style.height = '36px'; curR.style.opacity = '.5'; });
-  });
+  // custom cursor removed to improve mobile/UX
 
   /* ─── Nav scroll ─── */
   const nav = document.getElementById('mainNav');
@@ -915,6 +877,21 @@
   document.getElementById('lbNext').addEventListener('click', () => { lbIdx = (lbIdx + 1) % imgs.length; lbImg.src = imgs[lbIdx]; });
   lb.addEventListener('click', e => { if (e.target === lb) { lb.classList.remove('open'); document.body.style.overflow = ''; } });
 
+  /* ─── Allow deletion of default sample photos (only defaults) ─── */
+  document.querySelectorAll('.photo-tile').forEach((tile, i) => {
+    // mark existing tiles as default
+    tile.dataset.default = 'true';
+    const del = document.createElement('button');
+    del.className = 'del-default';
+    del.title = 'Remove sample photo';
+    del.style = 'position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.5);color:var(--gold);border:none;padding:6px;border-radius:4px;cursor:pointer;display:none;z-index:5;';
+    del.innerText = 'Delete';
+    del.addEventListener('click', (e) => { e.stopPropagation(); tile.remove(); });
+    tile.appendChild(del);
+    tile.addEventListener('mouseenter', () => { if (tile.dataset.default==='true') del.style.display = 'block'; });
+    tile.addEventListener('mouseleave', () => { del.style.display = 'none'; });
+  });
+
   /* ─── Video Modal (hover preview + click full) ─── */
   const videoCards = document.querySelectorAll('.video-card');
   const vModal = document.getElementById('video-modal');
@@ -929,6 +906,19 @@
       modalVid.play();
       document.body.style.overflow = 'hidden';
     });
+  });
+  /* add delete for default video cards */
+  document.querySelectorAll('.video-card').forEach(card => {
+    card.dataset.default = 'true';
+    const del = document.createElement('button');
+    del.className = 'del-default-vid';
+    del.title = 'Remove sample video';
+    del.style = 'position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.5);color:var(--gold);border:none;padding:6px;border-radius:4px;cursor:pointer;display:none;z-index:5;';
+    del.innerText = 'Delete';
+    del.addEventListener('click', (e) => { e.stopPropagation(); card.remove(); });
+    card.appendChild(del);
+    card.addEventListener('mouseenter', () => { if (card.dataset.default==='true') del.style.display = 'block'; });
+    card.addEventListener('mouseleave', () => { del.style.display = 'none'; });
   });
   document.getElementById('vmClose').addEventListener('click', () => {
     vModal.classList.remove('open');

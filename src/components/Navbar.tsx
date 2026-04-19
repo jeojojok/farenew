@@ -9,6 +9,11 @@ const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
+  // hide navbar on root since the root embeds a full static theme with its own nav
+  if (typeof window !== 'undefined' && window.location.pathname === '/') {
+    return null;
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
